@@ -1,8 +1,0 @@
-{
-  "name": "GwimaceOWO",
-  "version": "1.0.0",
-  "entry": "index.js",
-  "description": "A OwO-themed Skyblock mod with jokes, stats, and utilities!",
-  "requires": ["RenderLib", "SkyblockStats"],
-  "repo": "https://github.com/Gwimace-chan/GwimaceOwO/releases/tag/Debug"
-}
