@@ -5,23 +5,27 @@ const config = {
 };
 
 let guiVisible = false;
+const playerName = Player.getName(); // Get the player's username
 
 // ===== OWO MODE TOGGLE =====
 register("command", () => {
     config.owoMode = !config.owoMode;
     ChatLib.chat(`&d[GwimaceOwO] &fOwO mode: ${config.owoMode ? "&aEnabled >w<" : "&cDisabled :c"}`);
-}).setName("owo").setAliases("owomode");
+}).setName("owo").setAliases("owomode", "gwimaceowo");
 
-// ===== GUI RENDER =====
+// ===== CUSTOM GUI RENDER (NO RenderLib) =====
 register("renderOverlay", () => {
     if (guiVisible && config.showGUI) {
-        // Draw background
-        RenderLib.fill(100, 100, 200, 150, 0x80000000); // x, y, width, height, color
-        
-        // Draw stats
-        RenderLib.text("&4GwimaceOwO Stats", 110, 110);
-        RenderLib.text("&7Coins: &6" + getPurse().toLocaleString(), 110, 130);
-        RenderLib.text("&7Farming: &aLevel " + getFarmingLevel(), 110, 150);
+        const coins = getPurse().toLocaleString();
+        const farmingLevel = getFarmingLevel();
+
+        // Draw background box
+        Renderer.drawRect(Renderer.color(0, 0, 0, 100), 100, 100, 200, 150);
+
+        // Draw text
+        Renderer.drawString("§4GwimaceOwO Stats", 110, 110);
+        Renderer.drawString(`§7Coins: §6${coins}`, 110, 130);
+        Renderer.drawString(`§7Farming: §aLevel ${farmingLevel}`, 110, 150);
     }
 });
 
@@ -36,16 +40,23 @@ function getFarmingLevel() {
     return profile?.stats?.farming?.level || 0;
 }
 
-// ===== OWO CHAT TRANSLATOR (ONLY FOR OTHER PLAYERS) =====
+// ===== OWO CHAT TRANSLATOR =====
 register("chat", (event) => {
-    if (config.owoMode && !Player.getPlayer().getName().equals(event.sender)) {
-        let message = ChatLib.getChatMessage(event);
-        message = message
+    if (config.owoMode) {
+        const message = ChatLib.getChatMessage(event);
+        const sender = ChatLib.getChatSender(event);
+
+        // Skip the player's own messages
+        if (sender === playerName) return;
+
+        // Preserve color codes and UwU-ify
+        const translated = message
             .replace(/[rl]/g, 'w')
             .replace(/\!/g, '! >w<')
             .replace(/\?/g, '? OwO');
+
         cancel(event);
-        ChatLib.chat(`${event.sender}: ${message}`);
+        ChatLib.chat(`${sender}: ${translated}`);
     }
 }).setCriteria("${message}");
 
@@ -54,12 +65,11 @@ register("renderItemOverlay", (item, x, y) => {
     if (config.owoMode && item) {
         const originalName = item.getName();
         const owoName = originalName
-            .replace(/Giant/gi, "Gwiant") // "Giant's Sword" → "Gwiant's Sword"
-            .replace(/sword/gi, "sword OwO") // Add OwO to swords
-            .replace(/pickaxe/gi, "pickaxe UwU"); // Add UwU to pickaxes
+            .replace(/Giant/gi, "Gwiant")
+            .replace(/sword/gi, "sword OwO");
         
-        // Render modified name
-        RenderLib.drawString(owoName, x, y - 10, 0xFFFFFF, false, 1, true);
+        // Draw modified name above the item
+        Renderer.drawString(owoName, x, y - 10, false, 1);
     }
 });
 
@@ -67,4 +77,4 @@ register("renderItemOverlay", (item, x, y) => {
 register("command", () => {
     guiVisible = !guiVisible;
     ChatLib.chat(`&4[GwimaceOwO] GUI ${guiVisible ? "&aEnabled" : "&cDisabled"}`);
-}).setName("gwim");
+}).setName("gwim").setAliases("gwimace");
