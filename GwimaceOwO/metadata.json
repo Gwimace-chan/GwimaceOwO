@@ -1,8 +1,8 @@
 {
-  "name": "GwimaceOWO",
-  "version": "1.0.0",
-  "entry": "index.js",
-  "description": "OwO-themed Skyblock mod with GUI, chat/item translators, and fun commands!",
-  "requires": ["RenderLib", "ChatLib", "PlayerLib", "ItemLib"],
-  "repo": "https://github.com/Gwimace-chan/GwimaceOwO"
+    "name": "GwimaceOwO",
+    "description": "A Hypixel Skyblock util mod by .grynx on discord",
+    "author": "Gwimace",
+    "entry": "index.js",
+    "version": "1.0.0",
+    "requires": ["axios", "BeaconBeam", "PogData", "RenderLib", "requestV2", "Vigilance"]
 }
