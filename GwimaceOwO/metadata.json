@@ -4,5 +4,5 @@
     "author": "Gwimace",
     "entry": "index.js",
     "version": "1.0.0",
-    "requires": ["axios", "BeaconBeam", "PogData", "RenderLib", "requestV2", "Vigilance"]
+    "requires": ["axios", "BeaconBeam", "PogData", "RenderLib", "requestV2", "Vigilance", "Elementa"]
 }
